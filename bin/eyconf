@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+$:.unshift(File.expand_path('../../lib', __FILE__))
+require 'ey_config'
+
+begin
+  EyConfig::Cli.start
+rescue StandardError => e
+  puts e.message
+  exit(1)
+end

@@ -1,4 +1,4 @@
-module EyConfig
+module EySecrets
   class Repository
     attr_reader :path
 

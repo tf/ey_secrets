@@ -1,7 +1,7 @@
 require 'engineyard-cloud-client'
 require 'yaml'
 
-module EyConfig
+module EySecrets
   class Environment
     def initialize(ey_environment)
       @ey_environment = ey_environment

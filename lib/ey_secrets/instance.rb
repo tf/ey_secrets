@@ -1,6 +1,6 @@
 require 'rainbow'
 
-module EyConfig
+module EySecrets
   class Instance
     attr_reader :hostname, :username, :app_name
 

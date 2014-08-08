@@ -1,14 +1,14 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ey_config/version'
+require 'ey_secrets/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ey_config"
-  spec.version       = EyConfig::VERSION
+  spec.name          = "ey_secrets"
+  spec.version       = EySecrets::VERSION
   spec.authors       = ["Tim Fischbach"]
   spec.email         = ["tfischbach@codevise.de"]
-  spec.summary       = "Manage config files accross Engine Yard instances."
+  spec.summary       = "Manage secret config files accross Engine Yard instances."
   spec.homepage      = ""
   spec.license       = "MIT"
 

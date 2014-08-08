@@ -8,13 +8,13 @@ module EySecrets
     desc 'update', 'Copy config files from deploy/config to instances.'
     def update
       repository.assert_clean!
-      environment = Environment.find!(options.merge(remotes: repository.remotes))
+      environment = Environment.find!(options.merge(remotes: app_remotes))
 
       environment.instances.each do |instance|
         puts Rainbow("Copying config to #{instance.hostname}").blue
 
         instance.ensure_config_dir!
-        instance.sync(config_repository.glob(File.join(environment.name, '*.env')))
+        instance.sync(repository.glob(File.join(environment.name, '*.env')))
         instance.restart
       end
     end
@@ -29,6 +29,12 @@ module EySecrets
 
     def repository
       Repository.new('.')
+    end
+
+    def app_remotes
+      repository.remotes.map do |remote|
+        remote.gsub(/_config\.git$/, '.git')
+      end
     end
   end
 end

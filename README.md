@@ -31,7 +31,7 @@ After commiting and pushing changes inside the config repository, run:
     $ cd my_project
     $ eysecrets update -e production
     
-Now all files of the form `deploy/config/production/*.env` are copied
+Now all files of the form `production/*.env` are copied
 to `/data/<app_name>/shared/config` on all instances of the production
 environment. The command also restarts passenger and the monit group
 `<app_name>_resque`.

@@ -8,7 +8,7 @@ module EySecrets
     desc 'update', 'Copy config files from deploy/config to instances.'
     def update
       repository.assert_clean!
-      environment = Environment.find!(options.merge(remotes: app_repository.remotes))
+      environment = Environment.find!(options.merge(remotes: repository.remotes))
 
       environment.instances.each do |instance|
         puts Rainbow("Copying config to #{instance.hostname}").blue

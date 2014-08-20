@@ -10,7 +10,7 @@ module EySecrets
         it 'returns repository uris' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
 
             remotes = Git.repository('repo').remotes
 
@@ -23,7 +23,7 @@ module EySecrets
         it 'returns paths relative to CWD' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file', 'some/file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
 
             files = Git.repository('repo').files
 
@@ -34,7 +34,7 @@ module EySecrets
         it 'removes leading dot' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
 
             files = Dir.chdir('repo') do
               Git.repository('.').files
@@ -49,7 +49,7 @@ module EySecrets
         it 'is true after clone' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
 
             repository = Git.repository('repo')
 
@@ -60,7 +60,7 @@ module EySecrets
         it 'is false if repo has untracked files' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
             `touch repo/other`
 
             repository = Git.repository('repo')
@@ -72,7 +72,7 @@ module EySecrets
         it 'is false if repo has modified files' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
             `echo "change" > repo/file`
 
             repository = Git.repository('repo')
@@ -84,7 +84,7 @@ module EySecrets
         it 'is false if repo has unpushed commits' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
             `(cd repo; echo "change" > file; git add .; git commit -m "change")`
 
             repository = Git.repository('repo')
@@ -96,7 +96,7 @@ module EySecrets
         it 'is true if all commits have been pushed' do
           in_sandbox do
             create_bare_repo('origin_repo', ['file'])
-            `git clone origin_repo repo`
+            clone_repo('origin_repo', 'repo')
             `(cd repo; echo "change" > file; git add .; git commit -m "change"; git push origin master 2> /dev/null)`
 
             repository = Git.repository('repo')
@@ -106,10 +106,17 @@ module EySecrets
         end
       end
 
+
+      def clone_repo(from, to)
+        `git clone #{from} #{to}`
+        Dir.chdir(to) { configure_git_user }
+      end
+
       def create_bare_repo(name, files = {})
         mkdir('original_repo')
         Dir.chdir('original_repo') do
           `git init`
+          configure_git_user
           files.each do |file|
             mkdir_p(File.dirname(file))
             touch(file)
@@ -117,6 +124,11 @@ module EySecrets
           `git add .; git commit -m "initial commit"`
         end
         `git clone --bare original_repo #{name}`
+      end
+
+      def configure_git_user
+        `git config user.email spec@example.com`
+        `git config user.name "EySecrets Spec"`
       end
 
       def in_sandbox(&block)

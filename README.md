@@ -1,5 +1,8 @@
 # Engine Yard Secrets
 
+[![Gem Version](https://badge.fury.io/rb/ey_secrets.svg)](http://badge.fury.io/rb/ey_secrets)
+[![Build Status](https://travis-ci.org/tf/ey_secrets.svg?branch=master)](https://travis-ci.org/tf/ey_secrets)
+
 Manage sensible configuration files accross Engine Yard instances.
 
 ## Installation

@@ -17,7 +17,9 @@ module EySecrets
     end
 
     def files
-      Dir[File.join(path, '*')]
+      Dir[File.join(path, '**', '*')].map do |file|
+        file.gsub(%r'^\./', '')
+      end
     end
 
     def in_sync?

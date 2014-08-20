@@ -22,12 +22,25 @@ module EySecrets
       describe '.files' do
         it 'returns paths relative to CWD' do
           in_sandbox do
-            create_bare_repo('origin_repo', ['file'])
+            create_bare_repo('origin_repo', ['file', 'some/file'])
             `git clone origin_repo repo`
 
             files = Git.repository('repo').files
 
-            expect(files).to eq(['repo/file'])
+            expect(files.sort).to eq(['repo/file', 'repo/some', 'repo/some/file'])
+          end
+        end
+
+        it 'removes leading dot' do
+          in_sandbox do
+            create_bare_repo('origin_repo', ['file'])
+            `git clone origin_repo repo`
+
+            files = Dir.chdir('repo') do
+              Git.repository('.').files
+            end
+
+            expect(files).to eq(['file'])
           end
         end
       end
@@ -94,11 +107,12 @@ module EySecrets
       end
 
       def create_bare_repo(name, files = {})
-        `mkdir original_repo`
+        mkdir('original_repo')
         Dir.chdir('original_repo') do
           `git init`
           files.each do |file|
-            `touch #{file}`
+            mkdir_p(File.dirname(file))
+            touch(file)
           end
           `git add .; git commit -m "initial commit"`
         end

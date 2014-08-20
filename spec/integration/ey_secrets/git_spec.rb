@@ -108,7 +108,7 @@ module EySecrets
 
 
       def clone_repo(from, to)
-        `git clone #{from} #{to}`
+        `git clone #{from} #{to} 2> /dev/null`
         Dir.chdir(to) { configure_git_user }
       end
 
@@ -123,7 +123,7 @@ module EySecrets
           end
           `git add .; git commit -m "initial commit"`
         end
-        `git clone --bare original_repo #{name}`
+        `git clone --bare original_repo #{name} 2> /dev/null`
       end
 
       def configure_git_user

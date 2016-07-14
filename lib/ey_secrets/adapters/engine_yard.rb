@@ -20,7 +20,9 @@ module EySecrets
     end
 
     def environments_from(ey_app)
-      ey_app.app_environments.map do |ey_app_environment|
+      ey_app_environments = ey_app.app_environments || []
+
+      ey_app_environments.map do |ey_app_environment|
         environment_from(ey_app, ey_app_environment.environment)
       end
     end

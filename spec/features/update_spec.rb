@@ -14,7 +14,11 @@ module EySecrets
 
     def repository(options = {})
       Repository.new(['git@git.exmaple.com:my_app_config.git'],
-                     ['production/secrets.env', 'staging/secrets.env'],
+                     [
+                       'production/secrets.env', 'staging/secrets.env',
+                       'production/secrets.yml', 'staging/secrets.yml',
+                       'production/secrets.json', 'staging/secrets.json',
+                     ],
                      options.fetch(:ready_for_update, true))
     end
 
@@ -26,12 +30,14 @@ module EySecrets
       }.to raise_error(Repository::NotReadyForUpdate)
     end
 
-    it 'copies .env files from environment directory to instances' do
+    it 'copies files from environment directory to instances' do
       options = {app: 'my_app', environment: 'production'}
 
       commands = Update.new(applications, repository, options).commands
 
       expect(commands).to include('scp production/secrets.env user@host:/data/my_app/shared/config/secrets.env')
+      expect(commands).to include('scp production/secrets.yml user@host:/data/my_app/shared/config/secrets.yml')
+      expect(commands).to include('scp production/secrets.json user@host:/data/my_app/shared/config/secrets.json')
     end
 
     it 'restarts monit' do

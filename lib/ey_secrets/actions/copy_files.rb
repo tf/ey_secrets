@@ -20,7 +20,7 @@ module EySecrets
     end
 
     def env_files
-      repository.glob("#{instance.environment.name}/*.env")
+      repository.glob("#{instance.environment.name}/*")
     end
   end
 end

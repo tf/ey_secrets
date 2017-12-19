@@ -1,9 +1,11 @@
 # CHANGELOG
 
-### Version 1.0.0
+### Unreleased Changes
 
-2017-12-19
+[Compare changes](http://github.com/tf/ey_secrets/compare/1-0-stable...master)
 
-[Compare changes](http://github.com/tf/ey_secrets/compare/v0.1.0...v1.0.0)
+None so far.
 
-1.0 release functionally identical to 0.1.
+See
+[1-0-stable branch](http://github.com/tf/ey_secrets/blob/1-0-stable/CHANGELOG.md)
+for previous changes.

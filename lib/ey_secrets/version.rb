@@ -1,3 +1,3 @@
 module EySecrets
-  VERSION = '0.1.0'.freeze
+  VERSION = '1.0.0.dev'.freeze
 end

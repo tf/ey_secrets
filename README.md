@@ -3,11 +3,12 @@
 [![Gem Version](https://badge.fury.io/rb/ey_secrets.svg)](http://badge.fury.io/rb/ey_secrets)
 [![Build Status](https://travis-ci.org/tf/ey_secrets.svg?branch=master)](https://travis-ci.org/tf/ey_secrets)
 
-Manage sensible configuration files accross Engine Yard instances.
+Manage sensitive configuration files across Engine Yard instances
+within a dedicated config app.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your config app's Gemfile:
 
     gem 'ey_secrets'
 
@@ -21,21 +22,34 @@ Or install it yourself as:
 
 ## Usage
 
-The repository is expected to contain one folder per Engine Yard
-environment, each containing files with `.env` extension. For example:
+The config app which is used for storing sensitive data is expected to
+be hosted within the same parent directory on the same git server as
+the software which uses the sensitive data. The sensitive data repo is
+expected to carry the name $APP_NAME_config.git if the software repo
+is named $APP_NAME.git. For example, if sensitive data can be found at
+`git@examplegit.com:companyrepo/software_config.git`, ey_secrets
+expects to find the app repo at
+`git@examplegit.com:companyrepo/software.git`. You can instead provide
+the app's name on Engine Yard using the `-a` option.
+
+The config repo is also expected to contain one folder per Engine Yard
+environment, each containing files specific to that environment. For
+example:
 
     staging/
       secrets.env
+      config.yml
     production/
       secrets.env
+      config.yml
 
-After commiting and pushing changes inside the config repository, run:
+After committing and pushing changes inside the config repository, run:
 
     $ cd my_project
     $ eysecrets update -e production
-    
-Now all files of the form `production/*.env` are copied
-to `/data/<app_name>/shared/config` on all instances of the production
+
+Now all files of the form `production/*` are copied to
+`/data/<app_name>/shared/config` on all instances of the production
 environment. The command also restarts passenger and the monit group
 `<app_name>_resque`.
 
